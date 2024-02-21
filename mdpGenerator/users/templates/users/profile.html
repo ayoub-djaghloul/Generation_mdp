@@ -1,10 +1,22 @@
-
 {% extends 'users/base.html' %}
 {% load static %}
-{% block content %}
-    <div class="container">
-        <h2 style="color: #55d6aa">{{user.username}}</h2>
-    <h2 style="color: #55d6aa">{{user.email}}</h2>
-    </div>
-{% endblock %}
 
+{% block content %}
+<div class="container">
+    <div class="profile">
+        <h1>Profile Information</h1>
+        <div class="profile-info">
+            <h2 style="color: #55d6aa">Username: {{ user.username }}</h2>
+            <h2 style="color: #55d6aa">Email: {{ user.email }}</h2>
+                <h3>Your Accounts ({{ user_accounts|length }})</h3>
+                <ul>
+                    {% for account in user_accounts %}
+                        <li>{{ account.platform }}: {{ account.password }} (Added on {{ account.date }})</li>
+                    {% empty %}
+                        <li>No accounts found.</li>
+                    {% endfor %}
+                </ul>
+    </div>
+</div>
+</div>
+{% endblock %}

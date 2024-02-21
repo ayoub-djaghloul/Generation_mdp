@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm
+from .models import compte
 # Create your views here.
 
 def home(request):
@@ -11,7 +12,8 @@ def login(request):
     return render(request, 'users/login.html')
 
 def profile(request):
-    return render(request, 'users/profile.html')
+    user_accounts = compte.objects.filter(user=request.user)
+    return render(request, 'users/profile.html', {'user_accounts': user_accounts})
 
 def signup(request):
     if request.method == 'POST':
