@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'users/css/main.css' %}" type="text/css">
+
+    <title>SafeGuard</title>
+</head>
+<body>
+<header>
+    <div class="container">
+      <h1 class="logo"></h1>
+
+      <nav>
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="{% url 'profile' %}">Profile</a></li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<div class="content">
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}" style="color: #55d6aa">
+            {{ message }}
+          </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+      {% block content %}
+      {% endblock content %}
+</body>
+</html>
