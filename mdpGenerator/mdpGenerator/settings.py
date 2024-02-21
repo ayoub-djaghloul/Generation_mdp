@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'users.apps.UsersConfig',
     'crispy_forms',
-    'regestrationapp.apps.RegestrationappConfig',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -80,6 +80,8 @@ WSGI_APPLICATION = 'mdpGenerator.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#database configuration for my pc
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -88,6 +90,14 @@ DATABASES = {
         'PASSWORD': 'system',
         'HOST': 'localhost',
         'PORT': '5432',
+    }
+}
+'''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -137,3 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'home'
