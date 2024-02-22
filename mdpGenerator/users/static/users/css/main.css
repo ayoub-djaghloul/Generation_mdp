@@ -72,3 +72,17 @@ nav a::before {
 nav a:hover::before {
   width: 100%;
 }
+
+.account-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.account-bubble {
+    display: inline-block;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+}

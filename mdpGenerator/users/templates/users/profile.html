@@ -8,15 +8,17 @@
         <div class="profile-info">
             <h2 style="color: #55d6aa">Username: {{ user.username }}</h2>
             <h2 style="color: #55d6aa">Email: {{ user.email }}</h2>
-                <h3>Your Accounts ({{ user_accounts|length }})</h3>
-                <ul>
-                    {% for account in user_accounts %}
-                        <li>{{ account.platform }}: {{ account.password }} (Added on {{ account.date }})</li>
-                    {% empty %}
-                        <li>No accounts found.</li>
-                    {% endfor %}
-                </ul>
+        </div>
+        <div class="accounts">
+            <h2>Your Accounts</h2>
+            <ul class="account-list">
+                {% for account in user_accounts %}
+                    <li class="account-bubble">{{ account.platform }}: {{ account.password }} (Added on {{ account.date|date:"Y-m-d" }})</li>
+                {% empty %}
+                    <li>No accounts found.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
 </div>
 {% endblock %}
