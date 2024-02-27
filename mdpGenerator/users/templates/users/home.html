@@ -3,7 +3,78 @@
 {% load static %}
 {% block content %}
 
-<h1 style="color: #55d6aa">SafeGuard Linker, Available soon ...</h1>
+<div class="container text-center">
+    <h1>SafeGuard Generator</h1>
+
+    <form action="#" id="passwordForm">
+    <select name="mode" id="modeSelector">
+        <option value="">Select your Mode</option>
+        <option value="0">Syntaxic word linking generation</option>
+        <option value="1">Random based generation</option>
+    </select>
+    <br>
+
+    <!-- Span to dynamically change the range name -->
+    <label id="rangeName">Number of words</label>
+    <input type="range" name="n" id="rangeInput" min="2" max="10">
+
+    <!-- Span to display the range value -->
+    <span id="rangeValue">2</span>
+    <br>
+    <input type="checkbox" name="specialcharacter" id="specialCharacter"> Special Character
+    <br>
+    <input type="checkbox" name="uppercase" id="uppercase"> Uppercase
+    <br>
+    <input type="checkbox" name="numbers" id="numbers"> Numbers
+    <br>
+    <input type="submit" value="Generate Password" class="btn btn-primary">
+    <br>
+</form>
+
+
+
+<script>
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+        var specialCharacterChecked = document.getElementById('specialCharacter').checked;
+        var uppercaseChecked = document.getElementById('uppercase').checked;
+        var numbersChecked = document.getElementById('numbers').checked;
+
+        if (!specialCharacterChecked && !uppercaseChecked && !numbersChecked) {
+            alert('Please select at least one option: Special Character, Uppercase, or Numbers.');
+            event.preventDefault();
+        }
+    });
+
+    var modeSelector = document.getElementById('modeSelector');
+    var rangeInput = document.getElementById('rangeInput');
+    var rangeValue = document.getElementById('rangeValue');
+    var rangeName = document.getElementById('rangeName');
+
+    // Update the range value display and range name on mode selection
+    modeSelector.addEventListener('change', function() {
+        if (this.value == "0") { // Syntaxic word linking generation
+            rangeInput.min = 2;
+            rangeInput.max = 10;
+            rangeInput.value = 2; // Reset range value to min
+            rangeName.textContent = 'Number of words:';
+        } else if (this.value == "1") { // Random based generation
+            rangeInput.min = 8;
+            rangeInput.max = 60;
+            rangeInput.value = 8; // Reset range value to min
+            rangeName.textContent = 'Password length:';
+        }
+        rangeValue.textContent = rangeInput.value; // Update range value display
+    });
+
+    // Update the range value display in real-time as the user changes the range
+    rangeInput.addEventListener('input', function() {
+        rangeValue.textContent = this.value;
+    });
+</script>
+
+
+
+</div>
 
 {% endblock %}
 
