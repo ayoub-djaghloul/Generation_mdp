@@ -6,9 +6,10 @@
 <div class="container text-center">
     <h1>SafeGuard Generator</h1>
 
-    <form action="#" id="passwordForm">
+    <form action="{% url 'home' %}" method="post" id="passwordForm">
+    {% csrf_token %}
     <select name="mode" id="modeSelector">
-        <option value="">Select your Mode</option>
+        <option value="" selected="selected">Select your Mode</option>
         <option value="0">Syntaxic word linking generation</option>
         <option value="1">Random based generation</option>
     </select>
