@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.contrib import messages
 from .forms import UserRegisterForm
+from .models import compte
 import random
 import string
 import nltk
@@ -20,7 +22,8 @@ def home(request):
 
 @login_required()
 def profile(request):
-    return render(request, 'users/profile.html')
+    user_accounts = compte.objects.filter(user=request.user)
+    return render(request, 'users/profile.html', {'user_accounts': user_accounts})
 
 def signup(request):
     if request.method == 'POST':
@@ -133,14 +136,27 @@ def password_generator_view(request):
         uppercase = "uppercase" in request.POST
         numbers = "numbers" in request.POST
 
-        # Generate password based on user input
         password = generateMdp(mode, n, special_characters, uppercase, numbers)
 
-        # Pass the generated password to the template
         return render(request, 'users/passwordDisplay.html', {'password': password})
 
-    # If not a POST request, or for the initial form load:
     return render(request, 'users/home.html')
 
 def passwordDisplay(request):
     return render(request, 'users/passwordDisplay.html')
+
+@login_required()
+def save_password(request):
+    if request.method == 'POST':
+        platform = request.POST.get('platform')
+        password = request.POST.get('password')
+        user = request.user
+
+        new_compte = compte(user=user, platform=platform, password=password)
+        new_compte.save()
+        messages.success(request, 'Password saved successfully!')
+
+
+        return HttpResponseRedirect(reverse('home'))
+
+    return HttpResponseRedirect(reverse('home'))
