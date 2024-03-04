@@ -16,11 +16,11 @@ nltk.download('brown')
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
-@login_required()
+@login_required(login_url='/')
 def home(request):
     return render(request, 'users/home.html')
 
-@login_required()
+@login_required(login_url='/')
 def profile(request):
     user_accounts = compte.objects.filter(user=request.user)
     return render(request, 'users/profile.html', {'user_accounts': user_accounts})
@@ -37,7 +37,6 @@ def signup(request):
         form = UserRegisterForm()
 
     return render(request, 'users/signup.html', {'form': form})
-
 
 def generateMdpRand(n, caractereSpeciaux, maj, nbr):
     caracteres = string.ascii_lowercase
@@ -66,7 +65,6 @@ def generateMdpRand(n, caractereSpeciaux, maj, nbr):
 
     return password
 
-
 def fetch_random_words_from_nltk_corpus(n, corpus_name='brown'):
     """Sélectionne n mots aléatoires à partir d'un corpus NLTK spécifié."""
     if corpus_name == 'brown':
@@ -76,7 +74,6 @@ def fetch_random_words_from_nltk_corpus(n, corpus_name='brown'):
     words = list(set(corpus.words()))
     random_words = random.sample(words, n)
     return random_words
-
 
 def generate_basic_sentence(n):
     """Génère une phrase simple en sélectionnant des mots de manière aléatoire."""
@@ -90,7 +87,6 @@ def generate_basic_sentence(n):
 
         if noun and verb and adj:
             return f"The {adj[0]} {noun[0]} {verb[0]}"
-
 
 def generateMdpWord(n, caractereSpeciaux, maj, nbr):
     words = generate_basic_sentence(n).split()
@@ -145,7 +141,6 @@ def password_generator_view(request):
 def passwordDisplay(request):
     return render(request, 'users/passwordDisplay.html')
 
-@login_required()
 def save_password(request):
     if request.method == 'POST':
         platform = request.POST.get('platform')
