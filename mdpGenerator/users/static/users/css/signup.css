@@ -88,3 +88,20 @@ button:hover{
 #chk:checked ~ .signup label{
 	transform: scale(.6);
 }
+.popup-error {
+    display: none; /* Cachez par défaut le pop-up */
+    position: absolute; /* Positionnement absolu ou fixe selon le besoin */
+    width: 200px; /* Largeur du pop-up */
+    background-color: #f44336; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    text-align: center; /* Alignement du texte */
+    border-radius: 6px; /* Bordures arrondies */
+    padding: 10px; /* Padding intérieur */
+    z-index: 1; /* Assurez-vous qu'il est au-dessus des autres éléments */
+}
+
+/* Style pour afficher le pop-up d'erreur lorsque le champ est en focus */
+input[type="text"]:focus + .popup-error,
+input[type="password"]:focus + .popup-error {
+    display: block; /* Affiche le pop-up */
+}
