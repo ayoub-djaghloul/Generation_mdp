@@ -4,24 +4,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
+    <!-- Assurez-vous d'inclure les liens vers les CSS nécessaires pour le thème, ainsi que pour Crispy Forms si nécessaire -->
     <link rel="stylesheet" href="{% static 'users/css/signup.css' %}" type="text/css">
-
+    <!-- Inclure Bootstrap CSS pour le thème (si nécessaire) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Sign Up</title>
 </head>
 <body>
-<div>
-    <form action="" method="POST">
-        {% csrf_token %}
-        <h1>Sign Up</h1>
-        {{ form|crispy }}
-        <button type="submit">Sign Up</button>
-
-    <div class="container">
-        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <form action="" method="POST">
+              {% csrf_token %}
+              <div class="mb-md-5 mt-md-4 pb-5">
+                <h2 class="fw-bold mb-2 text-uppercase">Sign Up</h2>
+                <p class="text-white-50 mb-5">Please fill in your details!</p>
+                {{ form|crispy }}
+                <button class="btn btn-outline-light btn-lg px-5" type="submit">Sign Up</button>
+              </div>
+              <div>
+                <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-white-50 fw-bold">Login</a></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-
-    </form>
-</div>
+  </div>
+</section>
+<!-- Inclure Bootstrap JS pour le thème (si nécessaire) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
