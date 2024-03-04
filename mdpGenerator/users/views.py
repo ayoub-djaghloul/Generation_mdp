@@ -8,13 +8,13 @@ from .forms import UserRegisterForm
 from .models import compte
 import random
 import string
-import nltk
+from transformers import pipeline
+import re
+import random
+import string
+
 from nltk.corpus import brown
 # Create your views here.
-
-nltk.download('brown')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
 
 @login_required()
 def home(request):
@@ -66,34 +66,52 @@ def generateMdpRand(n, caractereSpeciaux, maj, nbr):
 
     return password
 
+def generate_sentence_gpt2(n):
+    generator = pipeline('text-generation', model="gpt2", device=0)
 
-def fetch_random_words_from_nltk_corpus(n, corpus_name='brown'):
-    """Sélectionne n mots aléatoires à partir d'un corpus NLTK spécifié."""
-    if corpus_name == 'brown':
-        corpus = brown
-    else:
-        corpus = brown
-    words = list(set(corpus.words()))
-    random_words = random.sample(words, n)
-    return random_words
+    prompt = ""
+    outputs = generator(prompt, max_length=n+(n*3), num_return_sequences=1, pad_token_id=50256)
+
+    generated_text = outputs[0]["generated_text"].strip()
+
+    words = re.findall(r'\b[a-zA-Z]{2,}\b', generated_text)
+
+    adjusted_sentence = ' '.join(words[:n])
+
+    adjusted_sentence = adjusted_sentence.lower()
+
+    return adjusted_sentence
 
 
-def generate_basic_sentence(n):
-    """Génère une phrase simple en sélectionnant des mots de manière aléatoire."""
-    while True:
-        words = fetch_random_words_from_nltk_corpus(n, 'brown')
-        tagged_words = nltk.pos_tag(words)
 
-        noun = [word for word, tag in tagged_words if tag.startswith('NN')]
-        verb = [word for word, tag in tagged_words if tag.startswith('VB')]
-        adj = [word for word, tag in tagged_words if tag.startswith('JJ')]
 
-        if noun and verb and adj:
-            return f"The {adj[0]} {noun[0]} {verb[0]}"
+def generate_and_evaluate_sentence_gpt2(n, confidence_threshold=0.92, max_attempts=3):
+
+    generator = pipeline('text-generation', model="gpt2", device=0)
+    sentiment_analyzer = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english", device=0)
+
+    attempt = 0
+    while attempt < max_attempts:
+        attempt += 1
+        outputs = generator("", max_length=n+(n*3), num_return_sequences=1, pad_token_id=50256)
+        generated_text = outputs[0]["generated_text"].strip()
+        words = re.findall(r'\b[a-zA-Z]{2,}\b', generated_text)
+        adjusted_sentence = ' '.join(words[:n]).lower()
+
+        # Évaluation du sentiment de la phrase ajustée
+        sentiment_result = sentiment_analyzer(adjusted_sentence)[0]
+        confidence = sentiment_result['score']
+
+        # Si le taux de confiance dépasse le seuil, retourne la phrase
+        if confidence > confidence_threshold:
+            return adjusted_sentence
+
+    # Si toutes les tentatives échouent, retourne li jat
+    return adjusted_sentence
 
 
 def generateMdpWord(n, caractereSpeciaux, maj, nbr):
-    words = generate_basic_sentence(n).split()
+    words = generate_and_evaluate_sentence_gpt2(n).split()
 
     if not (caractereSpeciaux or maj or nbr):
         return ' '.join(words)
@@ -122,12 +140,57 @@ def generateMdpWord(n, caractereSpeciaux, maj, nbr):
 
     return password
 
+
+def generateMdpRandWithScore(score):
+    caractereSpeciaux = False
+    maj = False
+    nbr = False
+    if score <= 25:
+        length = 8
+    elif score <= 50:
+        length = 10
+    elif score <= 75:
+        length = 12
+    else:
+        length = 16
+
+    caractereSpeciaux = score > 50
+    maj = score > 25
+    nbr = score > 0
+
+    return generateMdpRand(length, caractereSpeciaux, maj, nbr)
+
+
+def generateMdpWordWithScore(score):
+    caractereSpeciaux = False
+    maj = False
+    nbr = False
+
+    if score <= 25:
+        num_words = 2
+    elif score <= 50:
+        num_words = 3
+    elif score <= 75:
+        num_words = 3
+    else:
+        num_words = 4
+
+    caractereSpeciaux = score > 50
+    maj = score > 25
+    nbr = score > 0
+
+    return generateMdpWord(num_words, caractereSpeciaux, maj, nbr)
+
+
 def generateMdp(mode, n, caractereSpeciaux, maj, nbr):
     if mode == 0:
         return generateMdpWord(n, caractereSpeciaux, maj, nbr)
     elif mode == 1:
         return generateMdpRand(n, caractereSpeciaux, maj, nbr)
-
+    elif mode ==2:
+        return generateMdpWordWithScore(n)
+    elif mode ==3:
+       return generateMdpRandWithScore(n)
 def password_generator_view(request):
     if request.method == "POST":
         mode = int(request.POST.get("mode", 1))  # Default to Random based generation if not specified
