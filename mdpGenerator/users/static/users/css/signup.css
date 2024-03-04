@@ -10,7 +10,7 @@ body{
 }
 .main{
 	width: 350px;
-	height: 500px;
+	height: 550px;
 	background: red;
 	overflow: hidden;
 	background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38") no-repeat center/ cover;
@@ -67,6 +67,11 @@ button{
 button:hover{
 	background: #6d44b8;
 }
+#error-messages p {
+    color: red;
+    margin: 10px 0;
+}
+
 .login{
 	height: 460px;
 	background: #eee;
@@ -80,7 +85,7 @@ button:hover{
 }
 
 #chk:checked ~ .login{
-	transform: translateY(-500px);
+	transform: translateY(-545px);
 }
 #chk:checked ~ .login label{
 	transform: scale(1);

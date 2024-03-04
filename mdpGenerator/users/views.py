@@ -1,45 +1,66 @@
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as auth_login, authenticate
+from django.http import JsonResponse
 from django.utils.cache import add_never_cache_headers
 from django.contrib.auth.decorators import login_required
 
 from .forms import UserRegisterForm
 from .models import compte
 from django.shortcuts import render, redirect
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 # Create your views here.
 def login_signup(request):
-    # Initialiser les formulaires ici pour s'assurer qu'ils sont toujours définis
     login_form = AuthenticationForm()
     signup_form = UserRegisterForm()
 
     if request.method == 'POST':
-        if 'signup' in request.POST:
+        if 'signup' in request.POST:  # Détecte l'action d'inscription
             signup_form = UserRegisterForm(request.POST)
             if signup_form.is_valid():
-                user = signup_form.save()  # This saves the user and returns the user instance
-                username = user.username  # Directly use the username from the user instance
-                password = signup_form.cleaned_data['password1']  # Get the password to authenticate
-                user = authenticate(username=username, password=password)  # Authenticate the user
+                user = signup_form.save()
+                username = user.username
+                password = signup_form.cleaned_data['password1']
+                user = authenticate(username=username, password=password)
                 if user:
-                    auth_login(request, user)  # Log the user in
-                    messages.success(request, f'Hi {username}, your account has been created!')
-                    return redirect('home')
+                    auth_login(request, user)
+                    if is_ajax(request):
+                        # Pour une requête AJAX, retourne une réponse JSON
+                        return JsonResponse({"success": True, "message": "Hi {}, your account has been created!".format(username)})
+                    else:
+                        # Pour une requête non-AJAX, continuez avec la logique habituelle
+                        messages.success(request, f'Hi {username}, your account has been created!')
+                        return redirect('home')
                 else:
                     print("User not authenticated")
             else:
-                print(signup_form.errors)  # Affiche les erreurs de validation du formulaire
-        else:
+                errors = signup_form.errors.as_json()
+                if is_ajax(request):
+                    return JsonResponse({"success": False, "errors": errors}, status=400)
+                print(signup_form.errors)
+        elif 'login' in request.POST:  # Détecte l'action de connexion
             login_form = AuthenticationForm(data=request.POST)
             if login_form.is_valid():
                 user = login_form.get_user()
                 auth_login(request, user)
-                return redirect('home')
-
+                if is_ajax(request):
+                    return JsonResponse({"success": True, "message": "You are now logged in!"})
+                else:
+                    messages.success(request, f'You are now logged in!')
+                    return redirect('home')
+            else:
+                errors = login_form.errors.as_json()
+                if is_ajax(request):
+                    return JsonResponse({"success": False, "errors": errors}, status=400)
+                print(login_form.errors)
     # Les formulaires sont passés au template, qu'ils aient été réinitialisés ou non
     response = render(request, 'users/login_signup.html', {'login_form': login_form, 'signup_form': signup_form})
     add_never_cache_headers(response)
     return response
+
 @login_required(login_url='/')
 def home(request):
     return render(request, 'users/home.html')

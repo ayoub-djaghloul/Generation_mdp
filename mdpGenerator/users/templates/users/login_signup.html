@@ -4,13 +4,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="{% static 'users/css/signup.css' %}" type="text/css">
         <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
     <title>Login</title>
 </head>
 <body>
-<div class="main">
+<div id="signup-errors"></div>
+<div class="main" >
     <input type="checkbox" id="chk" aria-hidden="true">
     <div class="signup">
         <form id="signup-form" action="" method="POST">
@@ -21,22 +26,6 @@
             <input type="password" name="password1" placeholder="Password" required="">
             <input type="password" name="password2" placeholder="Confirm Password" required="">
             <button type="submit" name="signup">Sign up</button>
-            <div id="signup-errors">
-                {% if signup_form.errors %}
-                    <div class="form-errors">
-                        {% for field in signup_form %}
-                            {% for error in field.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        {% endfor %}
-                        {% for error in signup_form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
-            </div>
-
 
         </form>
     </div>
@@ -48,27 +37,12 @@
             <input type="password" name="password" placeholder="Password" required="">
             <div class="form-group" id="login-button">
             <button type="submit" class="btn" name="login">Login</button>
-            <div id="login-errors">
-                {% if login_form.errors %}
-                    <div class="form-errors">
-                        {% for field in login_form %}
-                            {% for error in field.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        {% endfor %}
-                        {% for error in login_form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-
             </div>
-
-        </div>
         </form>
     </div>
 </div>
 
+        <script src="{% static 'js/form-ajax.js' %}"></script>
 
 </body>
 </html>
