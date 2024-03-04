@@ -8,7 +8,6 @@ urlpatterns = [
     path('', views.login_signup, name='login_signup'),
     path('profile/', views.profile, name='profile'),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('login_signup')), name='logout'),
-
     path('home/', views.password_generator_view, name='home'),
     path('signup/', views.signup, name='signup'),
     path('profile/', views.profile, name='profile'),
