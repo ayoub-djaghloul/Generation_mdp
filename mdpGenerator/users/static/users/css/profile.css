@@ -1,0 +1,74 @@
+/* Container Styles */
+.container1 {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.profile {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+/* Profile Info Styles */
+.profile-info h2 {
+    color: #55d6aa;
+    margin-bottom: 10px;
+}
+
+/* Accounts Section Styles */
+.accounts h2 {
+    margin-top: 20px;
+}
+
+.account-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.account-list li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.account-list li:hover {
+    transform: scale(1.02);
+    background-color: #eef9f9; /* Lighter shade for hover */
+    cursor: pointer; /* Changes cursor to indicate clickable */
+
+}
+
+.account-bubble {
+    color: #555;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+}
+
+
+.account-list li:hover::after {
+    content: "Click to Copy";
+    font-size: 0.8rem;
+    color: #333;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
