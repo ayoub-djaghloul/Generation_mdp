@@ -1,4 +1,3 @@
-
 {% extends 'users/base.html' %}
 {% load static %}
 {% block content %}
@@ -6,85 +5,122 @@
 {% if messages %}
     <ul class="messages">
         {% for message in messages %}
-            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
 {% endif %}
-
 
 <div class="container text-center">
     <h1>SafeGuard Generator</h1>
 
     <form action="{% url 'home' %}" method="post" id="passwordForm">
-    {% csrf_token %}
-    <select name="mode" id="modeSelector">
-        <option value="" selected="selected">Select your Mode</option>
-        <option value="0">Syntaxic word linking generation</option>
-        <option value="1">Random based generation</option>
-    </select>
-    <br>
+        {% csrf_token %}
+        <select name="mode" id="modeSelector" style="display:none;">
+            <option value="" selected="selected">Select your Mode</option>
+            <option value="0">Syntaxic word linking generation</option>
+            <option value="1">Random based generation</option>
+            <option value="2">With Word (Complexity mode)</option>
+            <option value="3">Rand (Complexity mode)</option>
+        </select>
+        <br>
 
-    <!-- Span to dynamically change the range name -->
-    <label id="rangeName">Number of words</label>
-    <input type="range" name="n" id="rangeInput" min="2" max="10">
+        <!-- Visible Mode Selector -->
+        <select id="visibleModeSelector">
+            <option value="" selected="selected">Select your Mode</option>
+            <option value="0">Syntaxic word linking generation</option>
+            <option value="1">Random based generation</option>
+            <option value="2">Generate with Complexity mode</option>
+        </select>
+        <br>
 
-    <!-- Span to display the range value -->
-    <span id="rangeValue">2</span>
-    <br>
-    <input type="checkbox" name="specialcharacter" id="specialCharacter"> Special Character
-    <br>
-    <input type="checkbox" name="uppercase" id="uppercase"> Uppercase
-    <br>
-    <input type="checkbox" name="numbers" id="numbers"> Numbers
-    <br>
-    <input type="submit" value="Generate Password" class="btn btn-primary">
-    <br>
-</form>
+        <!-- Span to dynamically change the range name -->
+        <label id="rangeName">Number of words</label>
+        <input type="range" name="n" id="rangeInput" min="2" max="10">
 
+        <!-- Span to display the range value -->
+        <span id="rangeValue">2</span>
+        <br>
+        <div id="options">
+            <input type="checkbox" name="specialcharacter" id="specialCharacter"> Special Character
+            <br>
+            <input type="checkbox" name="uppercase" id="uppercase"> Uppercase
+            <br>
+            <input type="checkbox" name="numbers" id="numbers"> Numbers
+            <br>
+        </div>
+        <div id="complexityOptions" style="display: none;">
+            <input type="radio" name="complexityType" value="2" onchange="setMode(this.value);"> With Word
+            <br>
+            <input type="radio" name="complexityType" value="3" onchange="setMode(this.value);"> Rand
+            <br>
+        </div>
+        <input type="submit" value="Generate Password" class="btn btn-primary">
+        <br>
+    </form>
 
+    <script>
+        document.getElementById('passwordForm').addEventListener('submit', function(event) {
+            var mode = document.getElementById('modeSelector').value;
+            if (mode !== "2" && mode !== "3") {
+                var specialCharacterChecked = document.getElementById('specialCharacter').checked;
+                var uppercaseChecked = document.getElementById('uppercase').checked;
+                var numbersChecked = document.getElementById('numbers').checked;
 
-<script>
-    document.getElementById('passwordForm').addEventListener('submit', function(event) {
-        var specialCharacterChecked = document.getElementById('specialCharacter').checked;
-        var uppercaseChecked = document.getElementById('uppercase').checked;
-        var numbersChecked = document.getElementById('numbers').checked;
+                if (!specialCharacterChecked && !uppercaseChecked && !numbersChecked) {
+                    alert('Please select at least one option');
+                    event.preventDefault();
+                }
+            }
+        });
 
-        if (!specialCharacterChecked && !uppercaseChecked && !numbersChecked) {
-            alert('Please select at least one option: Special Character, Uppercase, or Numbers.');
-            event.preventDefault();
+        var visibleModeSelector = document.getElementById('visibleModeSelector');
+        var modeSelector = document.getElementById('modeSelector');
+        var rangeInput = document.getElementById('rangeInput');
+        var rangeValue = document.getElementById('rangeValue');
+        var rangeName = document.getElementById('rangeName');
+        var optionsDiv = document.getElementById('options');
+        var complexityOptionsDiv = document.getElementById('complexityOptions');
+
+        visibleModeSelector.addEventListener('change', function() {
+            modeSelector.value = this.value; // Sync the hidden selector with the visible one
+            handleModeChange(this.value);
+        });
+
+        function handleModeChange(value) {
+            switch (value) {
+                case "0": // Syntaxic word linking generation
+                case "1": // Random based generation
+                    optionsDiv.style.display = '';
+                    complexityOptionsDiv.style.display = 'none';
+                    rangeInput.min = 2;
+                    rangeInput.max = 10;
+                    rangeInput.value = 2;
+                    rangeName.textContent = 'Number of words:';
+                    break;
+                case "2": // Generate with Complexity mode
+                    optionsDiv.style.display = 'none';
+                    complexityOptionsDiv.style.display = '';
+                    rangeInput.min = 1;
+                    rangeInput.max = 100;
+                    rangeInput.value = 1;
+                    rangeName.textContent = 'Complexity percentage:';
+                    break;
+                default:
+                    optionsDiv.style.display = '';
+                    complexityOptionsDiv.style.display = 'none';
+                    rangeName.textContent = 'Number of words:';
+            }
+            rangeValue.textContent = rangeInput.value;
         }
-    });
 
-    var modeSelector = document.getElementById('modeSelector');
-    var rangeInput = document.getElementById('rangeInput');
-    var rangeValue = document.getElementById('rangeValue');
-    var rangeName = document.getElementById('rangeName');
-
-    // Update the range value display and range name on mode selection
-    modeSelector.addEventListener('change', function() {
-        if (this.value == "0") { // Syntaxic word linking generation
-            rangeInput.min = 2;
-            rangeInput.max = 10;
-            rangeInput.value = 2; // Reset range value to min
-            rangeName.textContent = 'Number of words:';
-        } else if (this.value == "1") { // Random based generation
-            rangeInput.min = 8;
-            rangeInput.max = 60;
-            rangeInput.value = 8; // Reset range value to min
-            rangeName.textContent = 'Password length:';
+        function setMode(value) {
+            modeSelector.value = value; // Update the hidden mode selector when complexity option is chosen
         }
-        rangeValue.textContent = rangeInput.value; // Update range value display
-    });
 
-    // Update the range value display in real-time as the user changes the range
-    rangeInput.addEventListener('input', function() {
-        rangeValue.textContent = this.value;
-    });
-</script>
-
-
-
+        rangeInput.addEventListener('input', function() {
+            rangeValue.textContent = this.value;
+        });
+    </script>
 </div>
 
 {% endblock %}
-
