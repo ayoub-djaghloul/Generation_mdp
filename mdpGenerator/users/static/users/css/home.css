@@ -7,7 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh; /* Assure que le body prend au minimum toute la hauteur de la fenêtre */
+    min-height: 100vh;
 }
 
 header {
@@ -15,61 +15,71 @@ header {
     width: 100%;
 }
 
-.content {
+.content, .modes-explanation{
     width: 80%;
-    max-width: 1200px; /* Ajustez cette valeur selon le design souhaité */
+    max-width: 1200px;
     margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.b  {
+    width: 80%;
+    max-width: 2400px;
+    margin: 20px auto;
+    margin-right: -20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.logo {
+.logo, nav {
     padding: 10px 0;
 }
-
+h1 {
+    color:#27374D;
+}
 
 nav {
-  float: right;
+    float: right;
 }
 
 nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 nav li {
-  display: inline-block;
-  margin-left: 70px;
-  padding-top: 23px;
-
-  position: relative;
+    display: inline-block;
+    margin-left: 70px;
+    position: relative;
 }
 
 nav a {
-  color: #444;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 14px;
+    color: #444;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
 }
 
-nav a:hover {
-  color: #000;
+nav a:hover, nav a:focus {
+    color: #000;
 }
 
 nav a::before {
-  content: '';
-  display: block;
-  height: 5px;
-  background-color: #444;
-
-  position: absolute;
-  top: 0;
-  width: 0%;
-
-  transition: all ease-in-out 250ms;
+    content: '';
+    display: block;
+    height: 5px;
+    background-color: #444;
+    position: absolute;
+    top: 0;
+    width: 0%;
+    transition: all ease-in-out 250ms;
 }
 
 nav a:hover::before {
-  width: 100%;
+    width: 100%;
 }
 
 select, input[type="checkbox"], input[type="radio"], input[type="range"], input[type="submit"] {
@@ -90,22 +100,38 @@ input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-/* Ajout pour centrer le contenu sous le header */
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
+.card {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px; /* Taille compacte pour les cartes */
+}
+h3{
+    color: #444444;
+}
+.card h3 {
+    color: #007bff;
+    font-size: 14px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #333;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .container, .content {
+    .content, .modes-explanation {
         width: 95%;
     }
 
     nav li {
         margin-left: 40px;
+    }
+
+    .card {
+        width: 100%; /* Ajustement pour une meilleure lisibilité sur les appareils mobiles */
     }
 }

@@ -40,9 +40,9 @@
             </div>
             <!-- Options for mode 2 (Complexity) -->
             <div id="complexityOptions" style="display: none;">
-                <input type="radio" name="complexityType" value="2" onchange="setMode(this.value);"> With Word
+                <input type="radio" name="complexityType" value="2" onchange="setMode(this.value);"> Based on words
                 <br>
-                <input type="radio" name="complexityType" value="3" onchange="setMode(this.value);"> Rand
+                <input type="radio" name="complexityType" value="3" onchange="setMode(this.value);"> Completely random
                 <br>
             </div>
             <label id="rangeName" style="display: none;">Number of words</label>
@@ -90,7 +90,7 @@
                 rangeInput.style.display = '';
                 rangeName.style.display = '';
                 rangeValue.style.display = '';
-                rangeName.textContent = 'Number of Caracters:';
+                rangeName.textContent = 'Number of characters:';
                 rangeInput.min = 2;
                 rangeInput.max = 60;
             }
@@ -120,5 +120,26 @@
         }
     </script>
 </div>
+
+<div class="modes-explanation">
+    <h3>Understanding Password Generation Modes</h3>
+    <div class="b">
+    <div class="card">
+        <h3>Mode 1: Syntaxic word linking generation </h3>
+        <p>This mode creates passwords by linking words from meaningful sentences, offering a balance of memorability and security.</p>
+    </div>
+
+    <div class="card">
+        <h3>Mode 2: Random based Generation</h3>
+        <p>This mode generates a password in a completely random manner, offering high security by ensuring that the password doesn't relate to any personally identifiable information.</p>
+    </div>
+
+    <div class="card">
+        <h3>Mode 3: Complexity Percentage</h3>
+        <p>This mode allows for generating a password with a specified complexity. It offers two sub-modes: based on words or completely random, providing flexibility in how the complexity is applied.</p>
+    </div>
+    </div>
+</div>
+
 
 {% endblock %}

@@ -145,7 +145,9 @@ def generateMdpRandWithScore(score):
     caractereSpeciaux = False
     maj = False
     nbr = False
-    if score <= 25:
+    if score <= 10:
+        length = 4
+    elif score <= 25:
         length = 8
     elif score <= 50:
         length = 10
@@ -156,7 +158,7 @@ def generateMdpRandWithScore(score):
 
     caractereSpeciaux = score > 50
     maj = score > 25
-    nbr = score > 0
+    nbr = score > 25
 
     return generateMdpRand(length, caractereSpeciaux, maj, nbr)
 
@@ -177,7 +179,7 @@ def generateMdpWordWithScore(score):
 
     caractereSpeciaux = score > 50
     maj = score > 25
-    nbr = score > 0
+    nbr = score > 25
 
     return generateMdpWord(num_words, caractereSpeciaux, maj, nbr)
 

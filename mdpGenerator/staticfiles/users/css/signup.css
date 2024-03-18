@@ -1,0 +1,12 @@
+.gradient-custom {
+    background: #dde6ed;
+}
+
+.body {
+    color: #27374D;
+}
+
+.card-body {
+    max-width: 500px; /* ou toute autre valeur qui convient */
+    margin: auto;
+}
